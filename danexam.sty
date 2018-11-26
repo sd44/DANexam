@@ -1,0 +1,276 @@
+%
+% Copyright (C) 2018 by Ruixi Zhang <ruixizhang42@gmail.com>
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either version 1.3
+% of this license or (at your option) any later version.
+% The latest version of this license is in
+%   http://www.latex-project.org/lppl.txt
+% and version 1.3 or later is part of all distributions of LaTeX
+% version 2005/12/01 or later.
+%
+% This work has the LPPL maintenance status `maintained'.
+%
+% The Current Maintainer of this work is Ruixi Zhang.
+%
+% This work consists of the files danexam.sty,
+%                                 README.md
+%           and the derived file  danexam.pdf.
+%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{danexam}[%
+  2018/10/28 v1.0c a simple exam package]
+
+\RequirePackage{kvoptions}
+
+\SetupKeyvalOptions{
+  family=dan,
+  prefix=dan@
+}
+
+\DeclareBoolOption[false]{answer}
+\DeclareBoolOption[false]{bytotal}
+
+\DeclareDefaultOption{%
+  \PackageError{\@currname}{%
+    Unknown option `\CurrentOption'%
+  }{%
+    Available package options are:\MessageBreak
+    \space\space`answer,\MessageBreak
+    \space\space`bytotal%
+  }%
+}
+
+\ProcessKeyvalOptions*
+
+\RequirePackage{amsmath,dashundergaps}
+\RequirePackage{scalerel}
+% \RequirePackage[math-style=ISO, bold-style=ISO]{unicode-math}
+% 注意，unicode-math与被其认为过时的bm包不兼容，不要\RequirePackage{bm}
+
+% % TODO：unicode-math较为方便易用和先进，并且较容易由ISO改为GB国标，详情请见
+% % https://github.com/latexstudio/ChinaThesis/wiki/GB-math
+
+% \setmathfont[Scale = 1.1]{Libertinus Math}  
+
+% \setmainfont[Scale=1.1, SlantedFont = {Libertinus Serif Italic}]{Libertinus Serif}
+% \setsansfont{TeX Gyre Heros}
+% \setmonofont[Scale=1]{Libertinus Mono}
+
+
+\RequirePackage[bodytextleadingratio = 2, restoremathleading = true, footnoteleadingratio = 1.67]{zhlineskip}
+
+% TODO: 留待日后或许使用。
+% https://tex.stackexchange.com/questions/279652/macro-like-ignorespaces-for-ignoring-pars
+% \long\def\eat#1{\ignorepars}
+% \def\ignorepars{\futurelet\next\ignoreparsA}
+% \def\ignoreparsA{\ifx\next\par\expandafter\eat\fi}
+
+% 不好的习惯，但却是习俗。
+\everymath{\displaystyle}
+
+\dashundergapssetup{
+  gap-numbers = false,
+  gap-widen = true,
+  gap-extend-minimum = 10pt,
+  gap-extend-percent = 20,
+  teacher-gap-format = underline,
+  gap-font = \bfseries \large,
+}
+
+% 如果gapline参数为空的话，则显示两个 \qquad
+\def \if@empty#1{\def\temp{#1} \ifx\temp\empty }
+\newcommand{\gapline}[1]{
+  \ifdan@answer
+  \dashundergapssetup{teacher-mode = true}
+  \else
+  \dashundergapssetup{teacher-mode = false}
+  \fi%
+  \hskip 1pt%
+  \if@empty{#1} \gap{\qquad \qquad}
+  \else
+  \relax\ifmmode \dashundergapssetup{gap-font= \null} \fi \gap{#1} 
+  \fi \dashundergapssetup{gap-font= \bfseries \large} \hskip 1pt%
+}
+
+\RequirePackage{geometry}
+
+% TODO：以下为geometry无margin的设定，只适合A4 oneside这样一个页面。以后做其他页面支持时save
+% restore各种geometry。
+
+\geometry{%
+  includemp = true, % includes the margin notes, \marginparwidth and \marginparsep, into body when calculating horizontal calculation.
+  marginparsep = 0cm,
+  marginparwidth = 0cm,
+  % bindingoffset = 0pt,
+  top = 3cm,
+  bottom = 3cm,
+  % outer = 2cm, % twopage 应当使用inner,outer，而不是left,right
+  % inner = 2cm,
+  headheight = 6mm,
+  headsep = 5mm,
+  footskip = 10mm,
+  left = 2cm,
+  right = 2cm, % 如果要为todonotes包要使用的 marginparwidth 留出空间的话，尽量
+  %                 % 将其改小，如0.5cm
+}
+
+% \addtolength{\oddsidemargin}{-14pt}
+% \addtolength{\topmargin}{2pt}
+
+\RequirePackage{fancyhdr, lastpage}
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\cfoot{\footnotesize 蛋疼试题\quad 第\,\thepage\,页 \quad (共\pageref{LastPage}页) } %照抄他人
+% 代码
+
+\renewcommand{\headrulewidth}{0pt}
+
+\RequirePackage{enumitem}
+% \topsep 列表顶部与之前内容的额外空白，不含 \baselineskip
+% \partopsep 如果列表之前是一个空行，列表顶部的额外空白
+% \itemsep  列表各项之间额外的垂直空白
+% \parsep 一个 item 中，如果分段，段落间额外空白
+% \leftmargin 列表与左边距之间的水平距离，值为非负
+% \rightmargin 列表与右边距之间的水平距离，值为非负
+% \itemindent 每一 item 第一行的缩进
+% \listparindent 每一 item 第一行之后各行的缩进
+% \labelsep 标签盒子与每一 item 第一行文本之间距离
+% \labelwidth 标签盒子的宽度；如果标签过长，这一宽度会自动变大，直到列表的第一行文本为止
+
+% TODO：过时代码，留存@Question和@Ingroupqs这两个counter，留待以后使用。
+
+\setlist{itemindent = \parindent, listparindent =
+  \parindent, %labelindent = \parindent,
+  parsep = 0ex, partopsep = 0ex, itemsep = 0em }
+
+\newcounter{@Group}
+\newcounter{@Question}
+\newcounter{@Ingroupqs}[@Group]
+
+% TODO：过时代码，留存@Question和@Ingroupqs这两个counter，留待以后使用。
+\newcommand{\addquscounter}{
+  \stepcounter{@Question}
+  \stepcounter{@Ingroupqs}
+  \ifdan@bytotal
+  \renewcommand{\the@Question}{\arabic{@Question}}
+  \else 
+  \renewcommand{\the@Question}{\arabic{@Ingroupqs}}
+  \fi%
+}
+
+% TODO：期待enumerate早日完成 \AddEnumerateCounter的新实现。
+\newlist{qus}{enumerate}{3}
+\setlist[qus]{leftmargin = *, partopsep = 0em, topsep = 0em, 
+  parsep = 5pt, itemsep = 0em, leftmargin = 1.4em, listparindent = 0em}
+
+% setlist在目前版本不能叠加效果。
+\ifdan@bytotal
+  \setlist[qus, 1]{label = {\arabic*}., resume}
+\else
+  \setlist[qus, 1]{label = {\arabic*}.}
+\fi
+
+\setlist[qus, 2]{label = {\arabic*})}
+\setlist[qus, 3]{label = {\roman*})}
+
+\newcommand{\group}[1]{
+  % 仿section的空间设定。
+  % \addvspace{3.5ex plus 1ex minus .2ex}
+  \addvspace{3.5ex plus 2ex minus .2ex}
+  \stepcounter{@Group}
+  {\bfseries \chinese{@Group}、#1 \par}
+  \vskip 0.5em%
+}
+
+
+\renewcommand*{\title}[1]{\gdef\@title{#1}}
+
+\renewcommand\maketitle{
+  \newpage \null%
+  \begin{center}%
+    {\bfseries\@title \par}%
+  \end{center}%
+  \par
+  \noindent \unskip
+}
+
+
+\newcommand{\fillline}[1]{%
+  \hspace*{\fill}\mbox{(\quad#1\quad)}%
+}
+\RequirePackage{pifont}
+\newcommand{\dui}{
+  \ifdan@answer \fillline{\ding{52}}
+  \else \fillline{\quad}
+  \fi
+}
+
+\newcommand{\cuo}{
+  \ifdan@answer \fillline{\ding{56}}
+  \else \fillline{\quad}
+  \fi
+}
+
+\newcommand{\choice}[1]{%
+  \ifdan@answer \fillline{\large \bfseries #1}
+  \else \fillline{\quad}
+  \fi
+}
+
+% ------------------------------ 选择题 ----------------------------------%
+% 本代码来自于天津大学的TJRSD
+% https://github.com/TJRSD/gaokao_exam/blob/master/GEEexam.sty
+\RequirePackage{tasks}%选择题宏包，tasks环境
+\settasks{
+  counter-format={tsk[A].},
+  label-offset={0.4em},
+  label-align=left,
+  label-width = 1.3em,
+  column-sep={2pt},
+  item-indent={1pt},
+  before-skip={-0.3em},
+  after-skip={0em},
+  % after-item-skip = 1ex plus 1ex minus 1ex %  default skip
+  after-item-skip = 0ex plus 1pt minus 1pt
+}
+
+
+% ------------------------------ 简答题 ----------------------------------%
+
+
+% TODO: solution，未完成，先占位。 
+\newcommand{\solution}[1]{%
+  \par
+  \ifdan@answer
+  \vspace{1cm}
+  \begin{minipage}[t][1cm][t]{0.9\linewidth}
+    \large 答案：\par
+    #1
+  \end{minipage}
+  \fi
+}
+
+% TODO：subqs subsubqs 先不做，考虑是不是整合所有questions为enumerate，方便嵌套
+% 及排版。
+
+\RequirePackage{tikz}
+\usetikzlibrary{shapes,snakes}
+
+% 代码来源于http://www.latexstudio.net/archives/6609.html
+% TODO：线条的占用了内部空间，使内部空间不是完全尺寸。
+\newcommand{\drawcomposition}[3][0.8]{
+  \begin{figure}[!ht]
+    \centering
+    \begin{tikzpicture}[scale=#1]
+      % 画#1条竖线代表单行#1个格
+      \foreach \m in {1,2,...,#2}\draw(\m,0) -- (\m,{#3 *1.4 - 0.4});
+      % 画#2个横矩形，代表#2行
+      \foreach \n in {1,2,..., \the\numexpr#3 }\draw[fill=white,line width=0.4pt](0,{1.4*\n-0.4})rectangle(#2 ,{1.4*\n});
+      % 以下#1*#2个方格，如果能定义常量就方便操作了。
+      \draw[line width = 0.8pt](0,0)rectangle(#2,{#3 *1.4});
+    \end{tikzpicture}
+  \end{figure}
+}
+
+
