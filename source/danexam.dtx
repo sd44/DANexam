@@ -1,0 +1,761 @@
+% \iffalse meta-comment
+%
+% Copyright (C) 2018 by 蛋疼的蛋蛋 <sd44sd44@yeah.net>
+%
+% This file may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License, either
+% version 1.3 of this license or (at your option) any later
+% version. The latest version of this license is in:
+%
+% http://www.latex-project.org/lppl.txt
+%
+% and version 1.3 or later is part of all distributions of
+% LaTeX version 2005/12/01 or later.
+%
+% \fi
+
+% \iffalse
+%<package>\NeedsTeXFormat{LaTeX2e}[2005/12/01]
+%<package>\ProvidesPackage{danexam}
+%<package> [2018/11/21 v0.1 danexam is a simple exam package]
+%
+%<*driver>
+\documentclass[a4paper, oneside]{ltxdoc}
+\usepackage{dandanstyle}
+% \usepackage{danexam}
+
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+\OnlyDescription
+
+\begin{document}
+  \DocInput{danexam.dtx}
+\end{document}
+%</driver>
+% \fi
+%
+% \CheckSum{0}
+%
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+
+
+
+% \DoNotIndex{\newenvironment,\@bsphack,\@empty,\@esphack,\sfcode}
+% \DoNotIndex{\addtocounter,\label,\let,\linewidth,\newcounter}
+% \DoNotIndex{\noindent,\normalfont,\par,\parskip,\phantomsection}
+% \DoNotIndex{\providecommand,\ProvidesPackage,\refstepcounter}
+% \DoNotIndex{\RequirePackage,\setcounter,\setlength,\string,\strut}
+% \DoNotIndex{\textbackslash,\texttt,\ttfamily,\usepackage}
+% \DoNotIndex{\begin,\end,\begingroup,\endgroup,\par,\\}
+% \DoNotIndex{\if,\ifx,\ifdim,\ifnum,\ifcase,\else,\or,\fi}
+% \DoNotIndex{\let,\def,\xdef,\edef,\newcommand,\renewcommand}
+% \DoNotIndex{\expandafter,\csname,\endcsname,\relax,\protect}
+% \DoNotIndex{\Huge,\huge,\LARGE,\Large,\large,\normalsize}
+% \DoNotIndex{\small,\footnotesize,\scriptsize,\tiny}
+% \DoNotIndex{\normalfont,\bfseries,\slshape,\sffamily,\interlinepenalty}
+% \DoNotIndex{\textbf,\textit,\textsf,\textsc}
+% \DoNotIndex{\hfil,\par,\hskip,\vskip,\vspace,\quad}
+% \DoNotIndex{\centering,\raggedright,\ref}
+% \DoNotIndex{\c@secnumdepth,\@startsection,\@setfontsize}
+% \DoNotIndex{\ ,\@plus,\@minus,\p@,\z@,\@m,\@M,\@ne,\m@ne}
+% \DoNotIndex{\@@par,\DeclareOperation,\RequirePackage,\LoadClass}
+% \DoNotIndex{\AtBeginDocument,\AtEndDocument}
+%
+% \GetFileInfo{danexam.dtx}
+%
+% \changes{v0.1}{2018/11/21}{Initial version}
+%
+%
+% \title{\textsf{danexam}指南}
+% \author{蛋疼的蛋蛋 \\ \texttt{sd44sd44@yeah.net}}
+% \date{Version: 0.1Alpha}
+%
+% \maketitle \thispagestyle{empty}
+% \clearpage
+%
+% \pagestyle{fancy}
+% \tableofcontents \thispagestyle{empty}
+% \clearpage
+%
+% \section{简介}
+%
+% \pkg{danexam}旨在提供一个简便易用、功能多样、囊括文理科的XeLaTeX 、LuaLaTeX 试
+% 卷模版包。
+%
+% 本包开发过程中有参考Philip Hirschhorn所作\pkg{exam}、鲍宏昌所
+% 作\pkg{BHCexam}、TJRSD所作\pkg{GEEexam}，在此特表感谢。dtx文件的style参考借鉴
+% 了\pkg{thuthesis}。
+%
+% 作者第一次做宏包开发，多有欠缺之处还望用户多加批评指正，尤其欢迎有兴趣者与我一
+% 起完善本包。
+%
+
+% \section{使用须知}
+% \label{sec:xuzhi}
+
+% \begin{enumerate}
+
+% \item 因是中文试卷模版，请在调用本宏包前启用\pkg{ctex}。
+% \begin{latex}
+% \documentclass[<opt>]{ctexart}
+% % 或者
+% \usepackage[<opt>]{ctex}
+% \end{latex}
+% \note{因试卷排版的特殊性，本包将ctex的autoindent选项设为了0in，取消了段首自动
+% 缩进；试卷环境不建议使用twocolumn方式；指定图片宽度尽量使用linewidth而不是
+% textwidth；页面设置可由geometry命令自定义。}
+%
+% \item 除此之外本包构建
+%   于\pkg{tasks}、\pkg{dashundergaps}、\pkg{zhlineskip}、\pkg{enumitem}等包之上。
+%
+% \item 事实上不可能有一个不经修改就可直接使用的试卷模版。实际使用时，可将
+%   danexam.sty复制到您的源代码文件夹，并按需进行修改。
+% 
+% \end{enumerate}
+
+% \section{简单示例}
+% 请参照\file{exam.tex}、\file{examWithAns.tex}及与之相应的pdf文件。
+%
+% \section{使用说明}
+%
+% \subsection{试卷标题}
+% \DescribeMacro{\title}
+% \DescribeMacro{\maketitle}
+%
+% 在试卷上打印标题（默认加粗）
+% \begin{latex}
+% \documentclass[zihao = 5, a4paper]{ctexart}
+% \usepackage[answer]{danexam} % 显示问题答案
+%
+% \title{\zihao{-3} 2018年普通高等学校招生全国统一考试\\ 
+%   \zihao{-2} \bfseries \heiti 理科数学}  
+%
+% \maketitle
+%
+% 你想输入的其它内容
+% \end{latex}
+%
+% \subsection{大题标题}
+% \DescribeMacro{\group}
+% 设置大题的标题，默认加粗。
+% \begin{latex}
+% \group{大题题目内容，如“选择题。blablabla”}
+% \end{latex}
+%
+% \subsection{题目环境}
+% \DescribeEnv{qus}
+% 小题枚举环境。实质上这是一个经过了配置的enumerate环境。最多可嵌套3层，第一层
+% 题目标签为1. 2...；第二层为子题目，题目标签为1) 2) ...；第三层题目标签为罗马数字 i) ii) iii)....
+% \begin{latex}
+% \begin{qus}
+%   \item 小题题目内容
+%     \begin{qus}
+%       \item 子题题目
+%       \item 子题题目
+%     \end{qus}
+%   \item 小题题目内容
+%   \item 小题题目内容
+% \end{qus}
+% \end{latex}
+%
+%
+% \subsection{选择题}
+%
+% \DescribeEnv{tasks}
+% \DescribeMacro{\task}
+% \DescribeMacro{\choice}
+%
+% 本包使用\pkg{tasks}这个选择题宏包。\pkg{tasks}具体选项及设置请在命令行运行
+% \verb|texdoc tasks|查看其文档。
+%
+% 选项的答案请在题目内容后使用|\choice{}|命令，大括号内输入问题答案。
+%
+% \begin{latex}
+% \group{选择题。本大题共12小题，每小题5分，共60分。blablalba}
+% \begin{qus}
+% \item 问题题目1 \choice{A}
+%   \begin{tasks}(1)  % ()内指定选项所占用的列数，本例中为1列，也就是每一个选项占用一行。
+%     \task 选项1内容 \task 选项2内容 \task 选项3内容 \task 选项4内容
+%
+% \item 问题题目2 \choice{C}
+%   \begin{tasks}(2)  % 2列，也就是每两个选项占用一行。
+%     \task 选项1内容 \task 选项2内容 \task 选项3内容 \task 选项4内容
+% \end{qus}
+% \end{latex}
+%
+% \subsection{判断题}
+% \DescribeMacro{\dui}
+% \DescribeMacro{\cuo}
+% 在判断题目内容后输入本题答案。
+%
+% \begin{latex}
+% \group{判断题。blalbla}
+% \begin{qus}
+%   \item 你是人类吗？ \dui
+%   \item 太阳从西边升起吗？ \cuo
+% \end{qus}
+% \end{latex}
+%
+% \subsection{填空题}
+% \DescribeMacro{\gapline}
+% 填空下划线，大括号内输入答案。
+%
+% \begin{latex}
+% \group{填空题。blablalbla}
+% \begin{qus}
+%   \item 人的生命只有 \gapline{一次}。 \dui
+%   \item 我们生活在 \gapline{火星}。 \dui
+% \end{qus}
+% \end{latex}
+%
+% \subsection{简答题}
+% \DescribeMacro{\solution}
+% \begin{latex}
+% \group{简答题。blablalbla}
+% \begin{qus}
+% \item $ 8 x 6$等于多少？
+%  \solution{$48$}
+%   \vspace*{5cm}  % 注意使用vspace或vskip或vstretch等命令给答案留下空间。
+%
+% \item $ 9 x 9$等于多少？
+%  \solution{$81$}
+%   \vstretch{1}  % 注意使用vspace或vskip或vstretch等命令给答案留下空间。
+% \end{qus}
+% \end{latex}
+%
+% \subsection{作文题}
+% \DescribeMacro{\drawcomposition}
+% |\drawcomposition|\oarg{scale} \marg{columnnum} \marg{linenum}
+% 画作文稿线。
+% \begin{latex}
+% \group{作文题。blablalbla}
+% \begin{qus}
+% \item 阅读下面文章，写作文吧。
+%
+%   我是一篇文章，README。
+%   \drawcomposition[0.75]{20}{15} % 0.75为0.75厘米的方格，作文稿线15行20列。
+% \end{qus}
+% \end{latex}
+%
+% \note{注意命令中使用了figure和tikzpicture环境。}
+%
+% \section{选项说明}
+% \label{sec:option}
+%
+% % \DescribeOption{paper}
+% % 选择试卷页面大小，当前支持：a4paper, a3twocol 选项，默认为a4paper，会自动更改
+% % geometry。
+%
+% \DescribeOption{answer}
+% 显示问题答案。
+% \begin{latex}
+% % 显示问题答案
+% \usepackage[answer]{danexam}
+% \end{latex}
+%
+
+% \DescribeOption{bytotal}
+% 本包默认问题序号依次连续排序。如想让问题序号在\env{qus}结束后重新技术，请设置
+% \begin{latex}
+% % 每一qus 环境结束后重新排序
+% \usepackage[bytotal=false]{danexam}
+% \end{latex}
+%
+% \DescribeOption{lmargin}
+% 显示试卷左侧密封线，本代码参考自鲍宏昌的\pkg{BHCexam}
+% \begin{latex}
+% % 显示密封线
+% \usepackage[lmargin]{danexam}
+% \end{latex}
+% 
+% \DescribeOption{unicodeGBMath}
+% 启用unicode-math这一数学模式包，并且按照数学符号GB国标的要求进行一些调整。
+% \begin{latex}
+% % 使用unicode-math，并对个别数学符号微调。
+% \usepackage[unicodeGBMath]{danexam}
+% \end{latex}
+% \note{试验选项，主要为作者个人自用。开启本选项则强行启用\pkg{unicode-math}包，
+% 并为兼容国标对数学符号外观做些调整，详情请见\pkg{unicode-math}文档及本代码所借鉴
+% 文章—— Zeping Lee所写的
+% \href{https://github.com/latexstudio/ChinaThesis/wiki/GB-math}{《LaTeX 排版国标样
+% 式的数学符号》}}
+%
+% % \StopEventually{}
+%
+% \section{源代码说明}
+% 源代码过于简单，不许再做过多说明，请直接参看\file{danexam.sty}文件。
+
+%    \begin{macrocode}
+%<*sty>
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{danexam}[%
+  2018/10/28 v1.0c a simple exam package]
+
+  \ctexset{autoindent = 0pt}
+\RequirePackage{kvoptions}
+
+\SetupKeyvalOptions{
+  family=dan,
+  prefix=dan@
+}
+
+\DeclareBoolOption[false]{answer}
+\DeclareBoolOption[true]{bytotal}
+\DeclareBoolOption[false]{lmargin}
+\DeclareBoolOption[false]{unicodeGBMath}
+
+\DeclareDefaultOption{%
+  \PackageError{\@currname}{%
+    Unknown option `\CurrentOption'%
+  }{%
+    Available package options are:\MessageBreak
+    \space\space`answer,\MessageBreak
+    \space\space`bytotal,\MessageBreak
+    \space\space`lmargin,\MessageBreak
+    \space\space`unicodeGBMath%
+  }%
+}
+
+\ProcessKeyvalOptions*
+
+\RequirePackage{amsmath,dashundergaps}
+
+\ifdan@unicodeGBMath
+  % 注意，unicode-math与被其认为过时的bm包不兼容，不要\RequirePackage{bm}
+  \RequirePackage[math-style=ISO, bold-style=ISO, partial = upright]{unicode-math}%
+  \setmathfont[Scale = 1.1]{Libertinus Math}  
+% \setsansfont{TeX Gyre Heros}
+% \setmonofont[Scale=1]{Libertinus Mono}
+  % 以下修改根据zeping Lee 的文章而来
+  % https://github.com/latexstudio/ChinaThesis/wiki/GB-math
+  \AtBeginDocument{\renewcommand\parallel{\mathrel{/\mskip-2.5mu/}}}
+  \global\let\sim\backsim
+  \global\let\cong\backcong
+  \renewcommand\mathellipsis{\cdots}
+  \global\let\Delta\increment
+  % \let\limU\removenolimits  %limit position up
+  \AtBeginDocument{\renewcommand{\Re}{\operatorname{Re}}}
+  \AtBeginDocument{\renewcommand{\Im}{\operatorname{Im}}}
+  \AtBeginDocument{\renewcommand{\leq}{\leqslant}}
+  \AtBeginDocument{\renewcommand{\geq}{\geqslant}}
+\fi
+
+\RequirePackage{scalerel}
+
+% \setmainfont[Scale=1.1, SlantedFont = {Libertinus Serif Italic}]{Libertinus Serif}
+
+\newsavebox{\mlbox}
+\sbox{\mlbox}{
+	\begin{minipage}{0.9\paperheight}
+		\begin{center}
+			\heiti
+			班级 \underline{\hspace{15ex}} \quad
+			姓名 \underline{\hspace{15ex}} \quad
+			学号 \underline{\hspace{15ex}} \quad \\
+			\vspace{3ex}
+			\dotfill \dotfill 装 \dotfill 订 \dotfill 线 \dotfill \dotfill
+		\end{center}
+	\end{minipage}
+}
+
+\newcommand{\printml}{
+  % \addtolength{\oddsidemargin}{1.5cm}
+  \reversemarginpar
+	\marginpar{\rotatebox{90}{\usebox{\mlbox}}}
+}
+
+
+\RequirePackage[bodytextleadingratio = 2, restoremathleading = true, footnoteleadingratio = 1.67]{zhlineskip}
+
+% TODO: 留待日后或许使用。
+% https://tex.stackexchange.com/questions/279652/macro-like-ignorespaces-for-ignoring-pars
+% \long\def\eat#1{\ignorepars}
+% \def\ignorepars{\futurelet\next\ignoreparsA}
+% \def\ignoreparsA{\ifx\next\par\expandafter\eat\fi}
+
+% 不好的习惯，但却是习俗。
+\everymath{\displaystyle}
+
+\dashundergapssetup{
+  gap-numbers = false,
+  gap-widen = true,
+  gap-extend-minimum = 10pt,
+  gap-extend-percent = 20,
+  teacher-gap-format = underline,
+  gap-font = \bfseries \large,
+}
+
+% 如果gapline参数为空的话，则显示两个 \qquad
+\def \if@empty#1{\def\temp{#1} \ifx\temp\empty }
+\newcommand{\gapline}[1]{
+  \ifdan@answer
+  \dashundergapssetup{teacher-mode = true}
+  \else
+  \dashundergapssetup{teacher-mode = false}
+  \fi%
+  \hskip 1pt%
+  \if@empty{#1} \gap{\qquad \qquad}
+  \else
+  \relax\ifmmode \dashundergapssetup{gap-font= \null} \fi \gap{#1} 
+  \fi \dashundergapssetup{gap-font= \bfseries \large} \hskip 1pt%
+}
+
+\RequirePackage{geometry}
+
+% TODO：以下为geometry无margin的设定，只适合A4 oneside这样一个页面。以后做其他页面支持时save
+% restore各种geometry。
+
+\geometry{%
+  includemp = false, % includes the margin notes, \marginparwidth and \marginparsep, into body when calculating horizontal calculation.
+  marginparsep = 0.3cm,
+  marginparwidth = 2cm,
+  % bindingoffset = 1cm,
+  top = 2cm,
+  bottom = 3cm,
+  outer = 2cm, 
+  inner = 3cm,
+  headheight = 6mm,
+  headsep = 5mm,
+  footskip = 10mm,
+}
+
+\if@twocolumn
+  \geometry{columnsep = 1.3cm}
+\fi
+
+% \addtolength{\topmargin}{2pt}
+
+\RequirePackage{fancyhdr, lastpage}
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\cfoot{\small 蛋疼试题\quad 第\,\thepage\,页 \quad (共\pageref{LastPage}页) } %照抄他人
+% 代码
+
+\renewcommand{\headrulewidth}{0pt}
+
+\RequirePackage{enumitem}
+% \topsep 列表顶部与之前内容的额外空白，不含 \baselineskip
+% \partopsep 如果列表之前是一个空行，列表顶部的额外空白
+% \itemsep  列表各项之间额外的垂直空白
+% \parsep 一个 item 中，如果分段，段落间额外空白
+% \leftmargin 列表与左边距之间的水平距离，值为非负
+% \rightmargin 列表与右边距之间的水平距离，值为非负
+% \itemindent 每一 item 第一行的缩进
+% \listparindent 每一 item 第一行之后各行的缩进
+% \labelsep 标签盒子与每一 item 第一行文本之间距离
+% \labelwidth 标签盒子的宽度；如果标签过长，这一宽度会自动变大，直到列表的第一行文本为止
+
+% TODO：过时代码，留存@Question和@Ingroupqs这两个counter，留待以后使用。
+
+\setlist{itemindent = \parindent, listparindent =
+  \parindent, %labelindent = \parindent,
+  parsep = 0ex, partopsep = 0ex, itemsep = 0em }
+
+\newcounter{@Group}
+\newcounter{@Question}
+\newcounter{@Ingroupqs}[@Group]
+
+% TODO：过时代码，留存@Question和@Ingroupqs这两个counter，留待以后使用。
+\newcommand{\addquscounter}{
+  \stepcounter{@Question}
+  \stepcounter{@Ingroupqs}
+  \ifdan@bytotal
+  \renewcommand{\the@Question}{\arabic{@Question}}
+  \else 
+  \renewcommand{\the@Question}{\arabic{@Ingroupqs}}
+  \fi%
+}
+
+% TODO：期待enumerate早日完成 \AddEnumerateCounter的新实现。
+\newlist{qus}{enumerate}{3}
+\setlist[qus]{leftmargin = *, partopsep = 0em, topsep = 0em, 
+  parsep = 5pt, itemsep = 0em, leftmargin = 1.4em, listparindent = 0em}
+
+% setlist在目前版本不能叠加效果。
+\ifdan@bytotal
+  \setlist[qus, 1]{label = {\arabic*}., resume}
+\else
+  \setlist[qus, 1]{label = {\arabic*}.}
+\fi
+
+\setlist[qus, 2]{label = {\arabic*})}
+\setlist[qus, 3]{label = {\roman*})}
+
+\newcommand{\group}[1]{
+  % 仿section的空间设定。
+  % \addvspace{3.5ex plus 1ex minus .2ex}
+  \addvspace{3.5ex plus 2ex minus .2ex}
+  \stepcounter{@Group}
+  {\bfseries \chinese{@Group}、#1 \par}
+  \vskip 0.5em%
+}
+
+
+\renewcommand*{\title}[1]{\gdef\@title{#1}}
+
+\renewcommand\maketitle{
+  \newpage \null
+  \ifdan@lmargin \printml \fi
+  \vspace{-1cm}
+    {\centering \bfseries\@title \par}%
+  \par
+  \noindent \unskip
+}
+
+
+\newcommand{\fillline}[1]{%
+  \hspace*{\fill}\mbox{(\quad#1\quad)}%
+}
+\RequirePackage{pifont}
+\newcommand{\dui}{
+  \ifdan@answer \fillline{\ding{52}}
+  \else \fillline{\quad}
+  \fi
+}
+
+\newcommand{\cuo}{
+  \ifdan@answer \fillline{\ding{56}}
+  \else \fillline{\quad}
+  \fi
+}
+
+\newcommand{\choice}[1]{%
+  \ifdan@answer \fillline{\large \bfseries #1}
+  \else \fillline{\quad}
+  \fi
+}
+
+% ------------------------------ 选择题 ----------------------------------%
+% 本代码来自于天津大学的TJRSD
+% https://github.com/TJRSD/gaokao_exam/blob/master/GEEexam.sty
+\RequirePackage{tasks}%选择题宏包，tasks环境
+\settasks{
+  counter-format={tsk[A].},
+  label-offset={0.4em},
+  label-align=left,
+  label-width = 1.3em,
+  column-sep={2pt},
+  item-indent={1pt},
+  before-skip={-0.3em},
+  after-skip={0em},
+  % after-item-skip = 1ex plus 1ex minus 1ex %  default skip
+  after-item-skip = 0ex plus 1pt minus 1pt
+}
+
+
+% ------------------------------ 简答题 ----------------------------------%
+
+
+% TODO: solution，未完成，先占位。 
+\newcommand{\solution}[1]{%
+  \par
+  \ifdan@answer
+  \vspace{0.5cm}
+  \begin{minipage}[t][1cm][t]{0.9\linewidth}
+    \large \textbf{答案}：\par
+    #1
+  \end{minipage}
+  \fi
+}
+
+% TODO：subqs subsubqs 先不做，考虑是不是整合所有questions为enumerate，方便嵌套
+% 及排版。
+
+\RequirePackage{tikz}
+\usetikzlibrary{shapes,snakes}
+
+% 代码来源于http://www.latexstudio.net/archives/6609.html
+% TODO：线条的占用了内部空间，使内部空间不是完全尺寸。
+\newcommand{\drawcomposition}[3][0.8]{
+  % 使用minipage，搭配linewidth选项防止twolumn时出现跨栏错误。
+  \begin{figure}[!ht]
+    \centering
+    \begin{tikzpicture}[scale=#1]
+      % 画#1条竖线代表单行#1个格
+      \foreach \m in {1,2,...,#2}\draw(\m,0) -- (\m,{#3 *1.4 - 0.4});
+      % 画#2个横矩形，代表#2行
+      \foreach \n in {1,2,..., \the\numexpr#3 }\draw[fill=white,line width=0.4pt](0,{1.4*\n-0.4})rectangle(#2 ,{1.4*\n});
+      % 以下#1*#2个方格，如果能定义常量就方便操作了。
+      \draw[line width = 0.8pt](0,0)rectangle(#2,{#3 *1.4});
+    \end{tikzpicture}
+  \end{figure}
+}
+
+%</sty>
+%    \end{macrocode}
+
+
+% \iffalse
+%    \begin{macrocode}
+%<*dandanstyle>
+
+\ProvidesPackage{dandanstyle}
+\RequirePackage{hypdoc}
+\RequirePackage[UTF8,scheme=chinese,fontset=sourcesans]{ctex}
+
+\setmainfont[Scale=1.1, SlantedFont = {Libertinus Serif Italic}]{Libertinus Serif}
+\setsansfont{TeX Gyre Heros}
+\setmonofont[Scale=1]{Libertinus Mono}
+
+\RequirePackage[math-style=ISO, bold-style=ISO, partial = upright]{unicode-math}%
+\setmathfont[Scale = 1.1]{Libertinus Math}  
+% \setsansfont{TeX Gyre Heros}
+% \setmonofont[Scale=1]{Libertinus Mono}
+% 以下修改根据zeping Lee 的文章而来
+% https://github.com/latexstudio/ChinaThesis/wiki/GB-math
+\AtBeginDocument{\renewcommand\parallel{\mathrel{/\mskip-2.5mu/}}}
+\global\let\sim\backsim
+\global\let\cong\backcong
+\renewcommand\mathellipsis{\cdots}
+\global\let\Delta\increment
+% \let\limU\removenolimits  %limit position up
+\AtBeginDocument{\renewcommand{\Re}{\operatorname{Re}}}
+\AtBeginDocument{\renewcommand{\Im}{\operatorname{Im}}}
+\AtBeginDocument{\renewcommand{\leq}{\leqslant}}
+\AtBeginDocument{\renewcommand{\geq}{\geqslant}}
+\RequirePackage[
+top=2.5cm, bottom=2.5cm,
+left=4cm, right=2cm,
+headsep=3mm, a4paper]{geometry}
+\RequirePackage{array,longtable,booktabs}
+\RequirePackage{listings}
+\RequirePackage{fancyhdr}
+\RequirePackage[table]{xcolor}
+\RequirePackage{enumitem}
+\RequirePackage{etoolbox}
+\RequirePackage{metalogo}
+
+\colorlet{thu@macro}{blue!60!black}
+\colorlet{thu@env}{blue!70!black}
+\colorlet{thu@option}{purple}
+\patchcmd{\PrintMacroName}{\MacroFont}{\MacroFont\bfseries\color{thu@macro}}{}{}
+\patchcmd{\PrintDescribeMacro}{\MacroFont}{\MacroFont\bfseries\color{thu@macro}}{}{}
+\patchcmd{\PrintDescribeEnv}{\MacroFont}{\MacroFont\bfseries\color{thu@env}}{}{}
+\patchcmd{\PrintEnvName}{\MacroFont}{\MacroFont\bfseries\color{thu@env}}{}{}
+
+\def\DescribeOption{%
+  \leavevmode\@bsphack\begingroup\MakePrivateLetters%
+  \Describe@Option}
+\def\Describe@Option#1{\endgroup
+  \marginpar{\raggedleft\PrintDescribeOption{#1}}%
+  \thu@special@index{option}{#1}\@esphack\ignorespaces}
+\def\PrintDescribeOption#1{\strut \MacroFont\bfseries\sffamily\color{thu@option} #1\ }
+\def\thu@special@index#1#2{\@bsphack
+  \begingroup
+    \HD@target
+    \let\HDorg@encapchar\encapchar
+    \edef\encapchar usage{%
+      \HDorg@encapchar hdclindex{\the\c@HD@hypercount}{usage}%
+    }%
+    \index{#2\actualchar{\string\ttfamily\space#2}
+           (#1)\encapchar usage}%
+    \index{#1:\levelchar#2\actualchar
+           {\string\ttfamily\space#2}\encapchar usage}%
+  \endgroup
+  \@esphack}
+
+\lstdefinestyle{lstStyleBase}{%
+   basicstyle=\small\sffamily,
+   aboveskip=\medskipamount,
+   belowskip=\medskipamount,
+   lineskip=0pt,
+   boxpos=c,
+   showlines=false,
+   extendedchars=true,
+   upquote=true,
+   tabsize=2,
+   showtabs=false,
+   showspaces=false,
+   showstringspaces=false,
+   numbers=none,
+   linewidth=\linewidth,
+   xleftmargin=4pt,
+   xrightmargin=0pt,
+   resetmargins=false,
+   breaklines=true,
+   breakatwhitespace=false,
+   breakindent=0pt,
+   breakautoindent=true,
+   columns=flexible,
+   keepspaces=true,
+   gobble=2,
+   framesep=3pt,
+   rulesep=1pt,
+   framerule=1pt,
+   backgroundcolor=\color{gray!5},
+   stringstyle=\color{green!40!black!100},
+   keywordstyle=\bfseries\color{blue!50!black},
+   commentstyle=\slshape\color{black!60}}
+
+\lstdefinestyle{lstStyleShell}{%
+   style=lstStyleBase,
+   frame=l,
+   rulecolor=\color{purple},
+   language=bash}
+
+\lstdefinestyle{lstStyleLaTeX}{%
+   style=lstStyleBase,
+   frame=l,
+   rulecolor=\color{violet},
+   language=[LaTeX]TeX}
+
+\lstnewenvironment{latex}{\lstset{style=lstStyleLaTeX}}{}
+\lstnewenvironment{shell}{\lstset{style=lstStyleShell}}{}
+
+\setlist{nosep}
+
+\DeclareDocumentCommand{\option}{m}{\textsf{#1}}
+\DeclareDocumentCommand{\env}{m}{\texttt{#1}}
+\DeclareDocumentCommand{\pkg}{s m}{%
+  \texttt{#2}\IfBooleanF#1{\thu@special@index{package}{#2}}}
+\DeclareDocumentCommand{\file}{s m}{%
+  \texttt{#2}\IfBooleanF#1{\thu@special@index{file}{#2}}}
+\newcommand{\myentry}[1]{%
+  \marginpar{\raggedleft\color{purple}\bfseries\strut #1}}
+\newcommand{\note}[2][注意：]{{%
+  \color{magenta}{\bfseries #1}\emph{#2}}}
+
+\def\thuthesis{\textsc{Thu}\-\textsc{Thesis}}
+
+\RequirePackage{xargs}
+\RequirePackage[colorinlistoftodos,prependcaption,textsize=small]{todonotes}
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improve}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+\newcommandx{\thiswillnotshow}[2][1=]{\todo[disable,#1]{#2}}
+
+
+%%
+%</dandanstyle>
+%    \end{macrocode}
+% \fi
+
+% \Finale
+%
+% \setcounter{IndexColumns}{2}
+%
+% \def\indexname{索引}
+% \def\glossaryname{修改记录}
+% \IndexPrologue{\section{索引}}
+% \GlossaryPrologue{\section{版本更新}}
+%
+% \PrintIndex \PrintChanges
+\endinput
+

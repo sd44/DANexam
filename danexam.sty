@@ -1,0 +1,287 @@
+%%
+%% This is file `danexam.sty',
+%% generated with the docstrip utility.
+%%
+%% The original source files were:
+%%
+%% danexam.dtx  (with options: `sty')
+%% 
+%% This is a generated file.
+%% 
+%% Copyright (C) 2018 by 蛋疼的蛋蛋 <sd44sd44@yeah.net>
+%% 
+%% This file may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either
+%% version 1.3 of this license or (at your option) any later
+%% version. The latest version of this license is in:
+%% 
+%% http://www.latex-project.org/lppl.txt
+%% 
+%% and version 1.3 or later is part of all distributions of
+%% LaTeX version 2005/12/01 or later.
+%% 
+
+
+
+
+
+
+
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{danexam}[%
+  2018/10/28 v1.0c a simple exam package]
+
+  \ctexset{autoindent = 0pt}
+\RequirePackage{kvoptions}
+
+\SetupKeyvalOptions{
+  family=dan,
+  prefix=dan@
+}
+
+\DeclareBoolOption[false]{answer}
+\DeclareBoolOption[true]{bytotal}
+\DeclareBoolOption[false]{lmargin}
+\DeclareBoolOption[false]{unicodeGBMath}
+
+\DeclareDefaultOption{%
+  \PackageError{\@currname}{%
+    Unknown option `\CurrentOption'%
+  }{%
+    Available package options are:\MessageBreak
+    \space\space`answer,\MessageBreak
+    \space\space`bytotal,\MessageBreak
+    \space\space`lmargin,\MessageBreak
+    \space\space`unicodeGBMath%
+  }%
+}
+
+\ProcessKeyvalOptions*
+
+\RequirePackage{amsmath,dashundergaps}
+
+\ifdan@unicodeGBMath
+  % 注意，unicode-math与被其认为过时的bm包不兼容，不要\RequirePackage{bm}
+  \RequirePackage[math-style=ISO, bold-style=ISO, partial = upright]{unicode-math}%
+  \setmathfont[Scale = 1.1]{Libertinus Math}
+  % 以下修改根据zeping Lee 的文章而来
+  % https://github.com/latexstudio/ChinaThesis/wiki/GB-math
+  \AtBeginDocument{\renewcommand\parallel{\mathrel{/\mskip-2.5mu/}}}
+  \global\let\sim\backsim
+  \global\let\cong\backcong
+  \renewcommand\mathellipsis{\cdots}
+  \global\let\Delta\increment
+  % \let\limU\removenolimits  %limit position up
+  \AtBeginDocument{\renewcommand{\Re}{\operatorname{Re}}}
+  \AtBeginDocument{\renewcommand{\Im}{\operatorname{Im}}}
+  \AtBeginDocument{\renewcommand{\leq}{\leqslant}}
+  \AtBeginDocument{\renewcommand{\geq}{\geqslant}}
+\fi
+
+\RequirePackage{scalerel}
+
+
+\newsavebox{\mlbox}
+\sbox{\mlbox}{
+\begin{minipage}{0.9\paperheight}
+\begin{center}
+\heiti
+班级 \underline{\hspace{15ex}} \quad
+姓名 \underline{\hspace{15ex}} \quad
+学号 \underline{\hspace{15ex}} \quad \\
+\vspace{3ex}
+\dotfill \dotfill 装 \dotfill 订 \dotfill 线 \dotfill \dotfill
+\end{center}
+\end{minipage}
+}
+
+\newcommand{\printml}{
+  % \addtolength{\oddsidemargin}{1.5cm}
+  \reversemarginpar
+\marginpar{\rotatebox{90}{\usebox{\mlbox}}}
+}
+
+\RequirePackage[bodytextleadingratio = 2, restoremathleading = true, footnoteleadingratio = 1.67]{zhlineskip}
+
+
+\everymath{\displaystyle}
+
+\dashundergapssetup{
+  gap-numbers = false,
+  gap-widen = true,
+  gap-extend-minimum = 10pt,
+  gap-extend-percent = 20,
+  teacher-gap-format = underline,
+  gap-font = \bfseries \large,
+}
+
+\def \if@empty#1{\def\temp{#1} \ifx\temp\empty }
+\newcommand{\gapline}[1]{
+  \ifdan@answer
+  \dashundergapssetup{teacher-mode = true}
+  \else
+  \dashundergapssetup{teacher-mode = false}
+  \fi%
+  \hskip 1pt%
+  \if@empty{#1} \gap{\qquad \qquad}
+  \else
+  \relax\ifmmode \dashundergapssetup{gap-font= \null} \fi \gap{#1}
+  \fi \dashundergapssetup{gap-font= \bfseries \large} \hskip 1pt%
+}
+
+\RequirePackage{geometry}
+
+
+\geometry{%
+  includemp = false, % includes the margin notes, \marginparwidth and \marginparsep, into body when calculating horizontal calculation.
+  marginparsep = 0.3cm,
+  marginparwidth = 2cm,
+  % bindingoffset = 1cm,
+  top = 2cm,
+  bottom = 3cm,
+  outer = 2cm,
+  inner = 3cm,
+  headheight = 6mm,
+  headsep = 5mm,
+  footskip = 10mm,
+}
+
+\if@twocolumn
+  \geometry{columnsep = 1.3cm}
+\fi
+
+
+\RequirePackage{fancyhdr, lastpage}
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\cfoot{\small 蛋疼试题\quad 第\,\thepage\,页 \quad (共\pageref{LastPage}页) } %照抄他人
+
+\renewcommand{\headrulewidth}{0pt}
+
+\RequirePackage{enumitem}
+
+
+\setlist{itemindent = \parindent, listparindent =
+  \parindent, %labelindent = \parindent,
+  parsep = 0ex, partopsep = 0ex, itemsep = 0em }
+
+\newcounter{@Group}
+\newcounter{@Question}
+\newcounter{@Ingroupqs}[@Group]
+
+\newcommand{\addquscounter}{
+  \stepcounter{@Question}
+  \stepcounter{@Ingroupqs}
+  \ifdan@bytotal
+  \renewcommand{\the@Question}{\arabic{@Question}}
+  \else
+  \renewcommand{\the@Question}{\arabic{@Ingroupqs}}
+  \fi%
+}
+
+\newlist{qus}{enumerate}{3}
+\setlist[qus]{leftmargin = *, partopsep = 0em, topsep = 0em,
+  parsep = 5pt, itemsep = 0em, leftmargin = 1.4em, listparindent = 0em}
+
+\ifdan@bytotal
+  \setlist[qus, 1]{label = {\arabic*}., resume}
+\else
+  \setlist[qus, 1]{label = {\arabic*}.}
+\fi
+
+\setlist[qus, 2]{label = {\arabic*})}
+\setlist[qus, 3]{label = {\roman*})}
+
+\newcommand{\group}[1]{
+  % 仿section的空间设定。
+  % \addvspace{3.5ex plus 1ex minus .2ex}
+  \addvspace{3.5ex plus 2ex minus .2ex}
+  \stepcounter{@Group}
+  {\bfseries \chinese{@Group}、#1 \par}
+  \vskip 0.5em%
+}
+
+\renewcommand*{\title}[1]{\gdef\@title{#1}}
+
+\renewcommand\maketitle{
+  \newpage \null
+  \ifdan@lmargin \printml \fi
+  \vspace{-1cm}
+    {\centering \bfseries\@title \par}%
+  \par
+  \noindent \unskip
+}
+
+\newcommand{\fillline}[1]{%
+  \hspace*{\fill}\mbox{(\quad#1\quad)}%
+}
+\RequirePackage{pifont}
+\newcommand{\dui}{
+  \ifdan@answer \fillline{\ding{52}}
+  \else \fillline{\quad}
+  \fi
+}
+
+\newcommand{\cuo}{
+  \ifdan@answer \fillline{\ding{56}}
+  \else \fillline{\quad}
+  \fi
+}
+
+\newcommand{\choice}[1]{%
+  \ifdan@answer \fillline{\large \bfseries #1}
+  \else \fillline{\quad}
+  \fi
+}
+
+\RequirePackage{tasks}%选择题宏包，tasks环境
+\settasks{
+  counter-format={tsk[A].},
+  label-offset={0.4em},
+  label-align=left,
+  label-width = 1.3em,
+  column-sep={2pt},
+  item-indent={1pt},
+  before-skip={-0.3em},
+  after-skip={0em},
+  % after-item-skip = 1ex plus 1ex minus 1ex %  default skip
+  after-item-skip = 0ex plus 1pt minus 1pt
+}
+
+
+\newcommand{\solution}[1]{%
+  \par
+  \ifdan@answer
+  \vspace{0.5cm}
+  \begin{minipage}[t][1cm][t]{0.9\linewidth}
+    \large \textbf{答案}：\par
+    #1
+  \end{minipage}
+  \fi
+}
+
+
+\RequirePackage{tikz}
+\usetikzlibrary{shapes,snakes}
+
+\newcommand{\drawcomposition}[3][0.8]{
+  % 使用minipage，搭配linewidth选项防止twolumn时出现跨栏错误。
+  \begin{figure}[!ht]
+    \centering
+    \begin{tikzpicture}[scale=#1]
+      % 画#1条竖线代表单行#1个格
+      \foreach \m in {1,2,...,#2}\draw(\m,0) -- (\m,{#3 *1.4 - 0.4});
+      % 画#2个横矩形，代表#2行
+      \foreach \n in {1,2,..., \the\numexpr#3 }\draw[fill=white,line width=0.4pt](0,{1.4*\n-0.4})rectangle(#2 ,{1.4*\n});
+      % 以下#1*#2个方格，如果能定义常量就方便操作了。
+      \draw[line width = 0.8pt](0,0)rectangle(#2,{#3 *1.4});
+    \end{tikzpicture}
+  \end{figure}
+}
+
+
+
+\endinput
+%%
+%% End of file `danexam.sty'.
