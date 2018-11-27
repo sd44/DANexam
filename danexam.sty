@@ -27,7 +27,6 @@
 
 
 
-
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{danexam}[%
   2018/10/28 v1.0c a simple exam package]
@@ -261,12 +260,12 @@
   \fi
 }
 
-
 \RequirePackage{tikz}
 \usetikzlibrary{shapes,snakes}
 
 \newcommand{\drawcomposition}[3][0.8]{
-  % 使用minipage，搭配linewidth选项防止twolumn时出现跨栏错误。
+  % 使用minipage，搭配linewidth选项可防止twolumn时出现跨栏错误，但在multicols等
+  % 环境下会出问题。最好还是不要用任何twocolumn。
   \begin{figure}[!ht]
     \centering
     \begin{tikzpicture}[scale=#1]

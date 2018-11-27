@@ -99,13 +99,12 @@
 % 卷模版包。
 %
 % 本包开发过程中有参考Philip Hirschhorn所作\pkg{exam}、鲍宏昌所
-% 作\pkg{BHCexam}、TJRSD所作\pkg{GEEexam}，在此特表感谢。dtx文件的style参考借鉴
-% 了\pkg{thuthesis}。
+% 作\pkg{BHCexam}、TJRSD所作\pkg{GEEexam}，dtx文件的style参考借鉴
+% 了\pkg{thuthesis}，曾祥东对本包开发中遇到的问题多次提出解决方案，在此同表感谢。
 %
 % 作者第一次做宏包开发，多有欠缺之处还望用户多加批评指正，尤其欢迎有兴趣者与我一
 % 起完善本包。
 %
-
 % \section{使用须知}
 % \label{sec:xuzhi}
 
@@ -418,8 +417,7 @@
 
 \RequirePackage{geometry}
 
-% TODO：以下为geometry无margin的设定，只适合A4 oneside这样一个页面。以后做其他页面支持时save
-% restore各种geometry。
+% TODO：以后做其他页面支持时save restore各种geometry。
 
 \geometry{%
   includemp = false, % includes the margin notes, \marginparwidth and \marginparsep, into body when calculating horizontal calculation.
@@ -574,16 +572,14 @@
   \fi
 }
 
-% TODO：subqs subsubqs 先不做，考虑是不是整合所有questions为enumerate，方便嵌套
-% 及排版。
-
 \RequirePackage{tikz}
 \usetikzlibrary{shapes,snakes}
 
 % 代码来源于http://www.latexstudio.net/archives/6609.html
 % TODO：线条的占用了内部空间，使内部空间不是完全尺寸。
 \newcommand{\drawcomposition}[3][0.8]{
-  % 使用minipage，搭配linewidth选项防止twolumn时出现跨栏错误。
+  % 使用minipage，搭配linewidth选项可防止twolumn时出现跨栏错误，但在multicols等
+  % 环境下会出问题。最好还是不要用任何twocolumn。
   \begin{figure}[!ht]
     \centering
     \begin{tikzpicture}[scale=#1]

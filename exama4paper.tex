@@ -1,22 +1,22 @@
-\documentclass[a4paper, oneside, zihao = 5, % fontset=sourcesans, % sourcesans is my ctex fontset
-autoindent = 0em]{ctexart}
-\usepackage[answer=true, bytotal=true]{danexam}
+\documentclass[a4paper, zihao = 5, unicodeGBMath % fontset=sourcesans, % sourcesans is my ctex fontset
+]{ctexart}
+\usepackage{danexam}
 
-\usepackage[math-style=ISO, bold-style=ISO]{unicode-math} %注意，unicode-math与被其认为过时的bm包不兼容，不要\usepackage{bm}
-% TODO：unicode-math较为方便易用和先进，并且较容易由ISO改为GB国标，详情请见
-% https://github.com/latexstudio/ChinaThesis/wiki/GB-math
-\setmathfont[Scale = 1.1]{Libertinus Math}  
+% \usepackage[math-style=ISO, bold-style=ISO]{unicode-math} %注意，unicode-math与被其认为过时的bm包不兼容，不要\usepackage{bm}
+% % TODO：unicode-math较为方便易用和先进，并且较容易由ISO改为GB国标，详情请见
+% % https://github.com/latexstudio/ChinaThesis/wiki/GB-math
+% \setmathfont[Scale = 1.1]{Libertinus Math}  
 
 \setmainfont[Scale=1.1, SlantedFont = {Libertinus Serif Italic}]{Libertinus Serif}
 \setsansfont{TeX Gyre Heros}
 \setmonofont[Scale=1]{Libertinus Mono}
 
 
-\title{\zihao{-3}  2018年火星高等学校招生统一考试\\ [-5pt]
-  \zihao{-2} \heiti 文理综合}
 
 \begin{document}
 
+\title{\zihao{-3}  2018年火星高等学校招生统一考试\\ [-5pt]
+  \zihao{-2} \heiti 文理综合}
 \maketitle
 
 {\bfseries \heiti 注意事项}：
@@ -65,7 +65,7 @@ autoindent = 0em]{ctexart}
 
   \begin{figure}[!htb]
     \centering
-    \includegraphics[width=0.8\textwidth]{zxt.jpg}
+    \includegraphics[width=0.8\linewidth]{zxt.jpg}
     \caption{月接待游客量折线图}
     % \label{fig:myphoto}
   \end{figure}%
@@ -104,6 +104,7 @@ autoindent = 0em]{ctexart}
   的活动，当作实践去理解，不是从主体方面去理解。“，所以在他看来，“哲学和对现实世界的研究这两者的关系就像\gapline{手淫}和\gapline{性爱}的关系一样。”
 
 \end{qus}
+
 \clearpage
 
 \group{简答题。}
@@ -129,7 +130,7 @@ autoindent = 0em]{ctexart}
     2) ${z-w}\in[4,6]$
   }
 
-  \vspace{7cm}
+  \vspace*{7cm}
 
 
 \item 已知复数~$z$ 满足：${z}-z^*=\dfrac{10}{1-w\textbf{i}}$（其中~$z^*$
@@ -137,10 +138,8 @@ autoindent = 0em]{ctexart}
 
   \solution{}
 
-  \vfill
+  \vspace*{4cm}
 \end{qus}
-
-\clearpage
 
 \group{作文题。}
 
@@ -156,10 +155,7 @@ autoindent = 0em]{ctexart}
     功的。一个灰色的回忆不能抗衡``现在''的生动和自由。
   \end{quotation}
 
-  \drawcomposition[0.8]{20}{13}
+  \drawcomposition[0.8]{20}{18}
 
-  \clearpage
-
-  \drawcomposition[0.8]{20}{20}
 \end{qus}
 \end{document}
