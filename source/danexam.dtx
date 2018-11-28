@@ -129,7 +129,7 @@
 % \end{enumerate}
 
 % \section{简单示例}
-% 请参照\file{exam.tex}、\file{examWithAns.tex}及与之相应的pdf文件。
+% 请参照testdoc目录下各个tex源文件及与之相对应的pdf文件。
 %
 % \section{使用说明}
 %
@@ -180,7 +180,7 @@
 % \DescribeMacro{\task}
 % \DescribeMacro{\choice}
 %
-% 本包使用\pkg{tasks}这个选择题宏包。\pkg{tasks}具体选项及设置请在命令行运行
+% 本包使用\pkg{tasks}为选择题提供选项设定。\pkg{tasks}功能强大，它的具体选项及设置请在命令行运行
 % \verb|texdoc tasks|查看其文档。
 %
 % 选项的答案请在题目内容后使用|\choice{}|命令，大括号内输入问题答案。
@@ -201,7 +201,7 @@
 % \subsection{判断题}
 % \DescribeMacro{\dui}
 % \DescribeMacro{\cuo}
-% 在判断题目内容后输入本题答案。
+% 为判断题提供行尾括号及答案，请在判断题目后输入。
 %
 % \begin{latex}
 % \group{判断题。blalbla}
@@ -218,8 +218,8 @@
 % \begin{latex}
 % \group{填空题。blablalbla}
 % \begin{qus}
-%   \item 人的生命只有 \gapline{一次}。 \dui
-%   \item 我们生活在 \gapline{火星}。 \dui
+%   \item 人的生命只有 \gapline{一次}。 
+%   \item 我们生活在 \gapline{火星}。 
 % \end{qus}
 % \end{latex}
 %
@@ -230,11 +230,11 @@
 % \begin{qus}
 % \item $ 8 x 6$等于多少？
 %  \solution{$48$}
-%   \vspace*{5cm}  % 注意使用vspace或vskip或vstretch等命令给答案留下空间。
+%   \vspace*{5cm}  % 注意使用vspace*或vskip或vstretch等命令给答案留下空间。
 %
 % \item $ 9 x 9$等于多少？
 %  \solution{$81$}
-%   \vstretch{1}  % 注意使用vspace或vskip或vstretch等命令给答案留下空间。
+%   \vstretch{1}  % 注意使用vspace*或vskip或vstretch等命令给答案留下空间。
 % \end{qus}
 % \end{latex}
 %
@@ -257,10 +257,6 @@
 % \section{选项说明}
 % \label{sec:option}
 %
-% % \DescribeOption{paper}
-% % 选择试卷页面大小，当前支持：a4paper, a3twocol 选项，默认为a4paper，会自动更改
-% % geometry。
-%
 % \DescribeOption{answer}
 % 显示问题答案。
 % \begin{latex}
@@ -270,11 +266,12 @@
 %
 
 % \DescribeOption{bytotal}
-% 本包默认问题序号依次连续排序。如想让问题序号在\env{qus}结束后重新技术，请设置
+% 此选项默认为true，默认问题序号依次连续排序。如想让问题序号在\env{qus}结束后重新技术，请设置
 % \begin{latex}
 % % 每一qus 环境结束后重新排序
 % \usepackage[bytotal=false]{danexam}
 % \end{latex}
+%
 %
 % \DescribeOption{lmargin}
 % 显示试卷左侧密封线，本代码参考自鲍宏昌的\pkg{BHCexam}
@@ -335,6 +332,8 @@
 
 \RequirePackage{amsmath,dashundergaps}
 
+  
+
 \ifdan@unicodeGBMath
   % 注意，unicode-math与被其认为过时的bm包不兼容，不要\RequirePackage{bm}
   \RequirePackage[math-style=ISO, bold-style=ISO, partial = upright]{unicode-math}%
@@ -374,8 +373,8 @@
 }
 
 \newcommand{\printml}{
-  % \addtolength{\oddsidemargin}{1.5cm}
   \reversemarginpar
+  \addtolength{\oddsidemargin}{0.3cm}
 	\marginpar{\rotatebox{90}{\usebox{\mlbox}}}
 }
 
@@ -419,6 +418,7 @@
 
 % TODO：以后做其他页面支持时save restore各种geometry。
 
+
 \geometry{%
   includemp = false, % includes the margin notes, \marginparwidth and \marginparsep, into body when calculating horizontal calculation.
   marginparsep = 0.3cm,
@@ -426,24 +426,34 @@
   % bindingoffset = 1cm,
   top = 2cm,
   bottom = 3cm,
-  outer = 2cm, 
+  outer = 2.5cm, 
   inner = 3cm,
   headheight = 6mm,
   headsep = 5mm,
   footskip = 10mm,
 }
 
-\if@twocolumn
-  \geometry{columnsep = 1.3cm}
-\fi
-
-% \addtolength{\topmargin}{2pt}
-
 \RequirePackage{fancyhdr, lastpage}
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
-\cfoot{\small 蛋疼试题\quad 第\,\thepage\,页 \quad (共\pageref{LastPage}页) } %照抄他人
+\cfoot{\small \quad 第\,\thepage\,页 \quad (共\pageref{LastPage}页) } %照抄他人
 % 代码
+
+% 以下twocolumn设置参考夜神月的设置
+% https://my.oschina.net/u/3468093/blog/2249279
+\if@twocolumn
+  \geometry{columnsep = 1.3cm}
+  \def\lastfox@putlabel{%
+    \immediate\write\@auxout{%
+      \string\newlabel{LastFox}{{\@arabic\c@fox}{}{}{}{}}}}
+  \AtEndDocument{\lastfox@putlabel}
+  \newcounter{foo}
+  \newcounter{fox}
+  \addtocounter{foo}{1}
+  \fancyfoot[CE,CO]{\kaishu{}第\refstepcounter{fox}\thefoo\refstepcounter{foo}页~/~共~\ref{LastFox}~页\hspace*{18cm}第\refstepcounter{fox}\thefoo\refstepcounter{foo}页~/~共~\ref{LastFox}~页}
+\fi
+
+
 
 \renewcommand{\headrulewidth}{0pt}
 
@@ -562,13 +572,11 @@
 
 % TODO: solution，未完成，先占位。 
 \newcommand{\solution}[1]{%
-  \par
   \ifdan@answer
-  \vspace{0.5cm}
-  \begin{minipage}[t][1cm][t]{0.9\linewidth}
+  \par
+  \vskip 2em
     \large \textbf{答案}：\par
     #1
-  \end{minipage}
   \fi
 }
 
@@ -611,6 +619,12 @@
 
 \RequirePackage[math-style=ISO, bold-style=ISO, partial = upright]{unicode-math}%
 \setmathfont[Scale = 1.1]{Libertinus Math}  
+%\AtBeginDocument{%
+%  \let\mathbb\relax
+%  \DeclareMathAlphabet{\mathbb}{U}{msb}{m}{n}%
+%}
+
+\setmathfont[range=\mathbb]{texgyrepagella-math.otf}
 % \setsansfont{TeX Gyre Heros}
 % \setmonofont[Scale=1]{Libertinus Mono}
 % 以下修改根据zeping Lee 的文章而来
@@ -625,10 +639,7 @@
 \AtBeginDocument{\renewcommand{\Im}{\operatorname{Im}}}
 \AtBeginDocument{\renewcommand{\leq}{\leqslant}}
 \AtBeginDocument{\renewcommand{\geq}{\geqslant}}
-\RequirePackage[
-top=2.5cm, bottom=2.5cm,
-left=4cm, right=2cm,
-headsep=3mm, a4paper]{geometry}
+\RequirePackage{geometry}
 \RequirePackage{array,longtable,booktabs}
 \RequirePackage{listings}
 \RequirePackage{fancyhdr}
