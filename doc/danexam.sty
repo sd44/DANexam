@@ -64,6 +64,7 @@
   % 注意，unicode-math与被其认为过时的bm包不兼容，不要\RequirePackage{bm}
   \RequirePackage[math-style=ISO, bold-style=ISO, partial = upright]{unicode-math}%
   \setmathfont[Scale = 1.1]{Libertinus Math}
+
   % 以下修改根据zeping Lee 的文章而来
   % https://github.com/latexstudio/ChinaThesis/wiki/GB-math
   \AtBeginDocument{\renewcommand\parallel{\mathrel{/\mskip-2.5mu/}}}
@@ -149,7 +150,7 @@
 \RequirePackage{fancyhdr, lastpage}
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
-\cfoot{\small \quad 第\,\thepage\,页 \quad (共\pageref{LastPage}页) } %照抄他人
+\cfoot{\small \kaishu \quad 第\,\thepage\,页 \quad (共\pageref{LastPage}页) } %照抄他人
 
 \if@twocolumn
   \geometry{columnsep = 1.3cm}
@@ -256,13 +257,15 @@
 }
 
 
-\newcommand{\solution}[1]{%
-  \ifdan@answer
+
+\usepackage{environ}
+\NewEnviron{solution}[1][5cm]{%
   \par
-  \vfill 2em
-    \large \textbf{答案}：\par
-    #1
+  \begin{minipage}[t][#1][t]{\linewidth}
+  \ifdan@answer
+    \large \textbf{答案}：\vskip 1ex
   \fi
+  \end{minipage}
 }
 
 \RequirePackage{tikz}

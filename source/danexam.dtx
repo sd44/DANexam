@@ -224,17 +224,20 @@
 % \end{latex}
 %
 % \subsection{简答题}
-% \DescribeMacro{\solution}
+% \DescribeEnv{solution}
+% 该环境有一个可选参数\oarg{length}，默认为5cm。提供空间和答案。
 % \begin{latex}
 % \group{简答题。blablalbla}
 % \begin{qus}
 % \item $ 8 x 6$等于多少？
-%  \solution{$48$}
-%   \vspace*{5cm}  % 注意使用vspace*或vskip或vstretch等命令给答案留下空间。
+%   \begin{solution}
+%     $48$
+%   \end{solution}
 %
 % \item $ 9 x 9$等于多少？
-%  \solution{$81$}
-%   \vstretch{1}  % 注意使用vspace*或vskip或vstretch等命令给答案留下空间。
+%   \begin{solution}[4cm]
+%     $81$
+%   \end{solution}
 % \end{qus}
 % \end{latex}
 %
@@ -338,6 +341,12 @@
   % 注意，unicode-math与被其认为过时的bm包不兼容，不要\RequirePackage{bm}
   \RequirePackage[math-style=ISO, bold-style=ISO, partial = upright]{unicode-math}%
   \setmathfont[Scale = 1.1]{Libertinus Math}  
+% \AtBeginDocument{% add \mathbb  方法二
+% \let\mathbb\relax
+% \DeclareMathAlphabet{\mathbb}{U}{msb}{m}{n}%
+% }
+%  \setmathfont[range=\mathbb]{texgyrepagella-math.otf} % 方法三
+
 % \setsansfont{TeX Gyre Heros}
 % \setmonofont[Scale=1]{Libertinus Mono}
   % 以下修改根据zeping Lee 的文章而来
@@ -436,7 +445,7 @@
 \RequirePackage{fancyhdr, lastpage}
 \pagestyle{fancy}
 \fancyhf{} % clear all header and footer fields
-\cfoot{\small \quad 第\,\thepage\,页 \quad (共\pageref{LastPage}页) } %照抄他人
+\cfoot{\small \kaishu \quad 第\,\thepage\,页 \quad (共\pageref{LastPage}页) } %照抄他人
 % 代码
 
 % 以下twocolumn设置参考夜神月的设置
@@ -570,14 +579,16 @@
 % ------------------------------ 简答题 ----------------------------------%
 
 
-% TODO: solution，未完成，先占位。 
-\newcommand{\solution}[1]{%
-  \ifdan@answer
+% TODO: solution，不完善，先占位。 
+
+\usepackage{environ}
+\NewEnviron{solution}[1][5cm]{%
   \par
-  \vskip 2em
-    \large \textbf{答案}：\par
-    #1
+  \begin{minipage}[t][#1][t]{\linewidth}
+  \ifdan@answer
+    \large \textbf{答案}：\vskip 1ex
   \fi
+  \end{minipage}
 }
 
 \RequirePackage{tikz}
@@ -619,12 +630,6 @@
 
 \RequirePackage[math-style=ISO, bold-style=ISO, partial = upright]{unicode-math}%
 \setmathfont[Scale = 1.1]{Libertinus Math}  
-%\AtBeginDocument{%
-%  \let\mathbb\relax
-%  \DeclareMathAlphabet{\mathbb}{U}{msb}{m}{n}%
-%}
-
-\setmathfont[range=\mathbb]{texgyrepagella-math.otf}
 % \setsansfont{TeX Gyre Heros}
 % \setmonofont[Scale=1]{Libertinus Mono}
 % 以下修改根据zeping Lee 的文章而来
