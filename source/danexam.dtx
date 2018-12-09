@@ -223,6 +223,36 @@
 % \end{qus}
 % \end{latex}
 %
+% \DescribeMacro{\blankans}
+% 不显示答案时用空白占位（无下划线）。有答案时显示答案。
+%
+% \begin{latex}
+% \usepackage{tabularx}
+% \newcolumntype{L}{>{$}X<{$}} % math-mode version of "l" column type
+% …………
+% \begin{qus}
+% \item 直接写得数 
+%   \begin{tabularx}{0.9\linewidth}{*{3}{L}}
+%     3 \times 5 + 38 = \blankans{53} & 68-81 \div 9 = \blankans{59} & 52 \div 7
+%     = \blankans{7 \cdots\cdots 3} \\
+%   \end{tabularx}
+% \end{qus}
+% \end{latex}
+%
+% \DescribeMacro{\oneline}
+% |\oneline| \oarg{length} \marg{answer}
+%
+% 可选参数\oarg{length}默认为填充下划线至行尾，您也可以指定下划线的长度。
+%
+% \begin{latex}
+% \begin{qus}
+%   \item 行首文字 接下划线\oneline{bla bla bla}。 
+%   \item 指定下划线长度 \oneline[3cm]{blabla bla bla}。 
+%   \item 独占整行需新起一行或一段 \\
+%        \oneline{blabla bla bla}。 
+% \end{qus}
+% \end{latex}
+
 % \subsection{简答题}
 % \DescribeEnv{solution}
 % 该环境有一个可选参数\oarg{length}，默认为5cm。提供空间和答案。
@@ -408,6 +438,15 @@
   gap-font = \bfseries \large,
 }
 
+\newcommand{\blankans}[1]{%
+  \large \relax\ifmmode \else \bfseries \fi 
+  \ifdan@answer
+    (#1) 
+  \else
+    \phantom{#1}
+  \fi
+}
+
 % 如果gapline参数为空的话，则显示两个 \qquad
 \def \if@empty#1{\def\temp{#1} \ifx\temp\empty }
 \newcommand{\gapline}[1]{
@@ -421,6 +460,12 @@
   \else
   \relax\ifmmode \dashundergapssetup{gap-font= \null} \fi \gap{#1} 
   \fi \dashundergapssetup{gap-font= \bfseries \large} \hskip 1pt%
+}
+
+\usepackage{linegoal}
+\newcommand{\oneline}[2][\linegoal]{%
+  \CJKunderline[hidden = false, skip = false]{\makebox[#1][c]{\large \bfseries
+      \ifdan@answer #2 \fi}}
 }
 
 \RequirePackage{geometry}
@@ -645,6 +690,7 @@
 \AtBeginDocument{\renewcommand{\leq}{\leqslant}}
 \AtBeginDocument{\renewcommand{\geq}{\geqslant}}
 \RequirePackage{geometry}
+\geometry{a4paper, inner= 4cm, outer = 2.8cm}
 \RequirePackage{array,longtable,booktabs}
 \RequirePackage{listings}
 \RequirePackage{fancyhdr}

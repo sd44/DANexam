@@ -1,4 +1,4 @@
-\documentclass[a4paper, zihao = -4, unicodeGBMath, fontset=sourcesans, % sourcesans is my ctex fontset
+\documentclass[a4paper, answer, zihao = -4, unicodeGBMath, fontset=sourcesans, % sourcesans is my ctex fontset
 ]{ctexart}
 \usepackage{danexam}
 \usepackage{xpinyin}
@@ -28,11 +28,11 @@
 \group{计算题。每道2分，共计12分。}
 
 \begin{qus}
-\item 直接写得数 % TODO: 应该在danexam包中增加不带下划线并可显示答案的命令。
+\item 直接写得数 
 
   \begin{tabularx}{0.9\linewidth}{*{3}{L}}
-    3 \times 5 + 38 = & 68-81 \div 9 = & 52 \div 7 = \\
-    6 \times 8 - 13 = & 72 \div 9 \times 8 = & 59 + 28 - 14 = 
+    3 \times 5 + 38 = \blankans{53}& 68-81 \div 9 = \blankans{59}& 52 \div 7 = \blankans{7 \cdots\cdots 3}\\
+    6 \times 8 - 13 = \blankans{35} & 72 \div 9 \times 8 = \blankans{64}& 59 + 28 - 14 = \blankans{73}
   \end{tabularx}
 \end{qus}
 
@@ -149,15 +149,14 @@
 
   \item 雪松们拉着手，请小鸟留下歌声 。（仿写拟人句）
 
-    \hrulefill % TODO: 加入danexam模版。
+      \oneline{火焰欺负了蜡烛，害的蜡烛在一旁伤心得流泪。 }
 
   \item 例：小象\CJKunderdot{一会儿}帮主人摘果子，\CJKunderdot{一会儿}又用长长
     的鼻子往家里搬木头。（用一会儿……一会儿……造句）
 
-    \hrulefill % TODO：应在danexam增加支持单行或多行rulefill并可显示答案的命令
-    \medskip
+    \oneline{} % TODO：应在danexam增加支持多行rulefill并可显示答案的命令
 
-    \hrulefill
+    \oneline{}
 
   \end{qus}
 
@@ -174,7 +173,6 @@
       答：最多可以分为9个小组。
     \end{solution}
 
-    \clearpage
   \item 看图列式：
     \begin{figure}[ht]
       \centering

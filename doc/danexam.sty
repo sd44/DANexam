@@ -27,6 +27,7 @@
 
 
 
+
 \NeedsTeXFormat{LaTeX2e}
 \ProvidesPackage{danexam}[%
   2018/10/28 v1.0c a simple exam package]
@@ -116,6 +117,15 @@
   gap-font = \bfseries \large,
 }
 
+\newcommand{\blankans}[1]{%
+  \large \relax\ifmmode \else \bfseries \fi
+  \ifdan@answer
+    (#1)
+  \else
+    \phantom{#1}
+  \fi
+}
+
 \def \if@empty#1{\def\temp{#1} \ifx\temp\empty }
 \newcommand{\gapline}[1]{
   \ifdan@answer
@@ -128,6 +138,12 @@
   \else
   \relax\ifmmode \dashundergapssetup{gap-font= \null} \fi \gap{#1}
   \fi \dashundergapssetup{gap-font= \bfseries \large} \hskip 1pt%
+}
+
+\usepackage{linegoal}
+\newcommand{\oneline}[2][\linegoal]{%
+  \CJKunderline[hidden = false, skip = false]{\makebox[#1][c]{\large \bfseries
+      \ifdan@answer #2 \fi}}
 }
 
 \RequirePackage{geometry}
